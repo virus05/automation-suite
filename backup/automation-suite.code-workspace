@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "automation-suite",
+			"path": "../automation-suite"
+		}
+	],
+	"settings": {}
+}
