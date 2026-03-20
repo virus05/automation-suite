@@ -1,0 +1,10 @@
+ini
+[Unit]
+Description=Run backup.service daily
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+
+[Install]
+WantedBy= timers.target

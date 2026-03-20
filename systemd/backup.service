@@ -1,0 +1,8 @@
+ini
+[Unit]
+Description= Run backup automation suite
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3/ /opt/automation-suite/orchestrators/run_backup.py
+WorkingDirectory=/opt/automation-suite
