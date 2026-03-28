@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: mydb
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U myuser -d mydb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGUSER: myuser
+      PGPASSWORD: mypassword
+      PGDATABASE: mydb
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest psycopg2-binary
+
+      - name: Create backup_history table
+        run: |
+          python - << 'EOF'
+          import psycopg2, os
+          conn = psycopg2.connect(
+              dbname=os.environ["PGDATABASE"],
+              user=os.environ["PGUSER"],
+              password=os.environ["PGPASSWORD"],
+              host=os.environ["PGHOST"],
+              port=os.environ["PGPORT"],
+          )
+          cur = conn.cursor()
+          cur.execute("""
+          CREATE TABLE IF NOT EXISTS backup_history (
+              id SERIAL PRIMARY KEY,
+              backup_type VARCHAR(50),
+              file_path TEXT,
+              created_at TIMESTAMP DEFAULT NOW(),
+              verified BOOLEAN DEFAULT FALSE
+          );
+          """)
+          conn.commit()
+          cur.close()
+          conn.close()
+          EOF
+
+      - name: Run tests
+        run: pytest
