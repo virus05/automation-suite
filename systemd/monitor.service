@@ -1,7 +1,7 @@
-ini
 [Unit]
 Description=Run monitoring automation suite
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python3 /opt/automation-suite/orchestrators/run_monitor.py
+ExecStart=/usr/bin/python3 /home/jenkins/automation-suite/orchestrators/run_monitor.py
+WorkingDirectory=/home/automation-suite

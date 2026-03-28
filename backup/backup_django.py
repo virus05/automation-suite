@@ -2,7 +2,7 @@ import shutil
 import datetime
 import os
 
-def backup_django_app(src="/var/www/myapp", dest="/var/backups/django"):
+def backup_django_app(src="/home/jenkins/automation-suite", dest="/var/backups/django"):
     """Create a compresed backup of the Django application folder."""
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     os.makedirs(dest, exist_ok=True)

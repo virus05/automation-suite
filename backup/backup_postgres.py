@@ -7,6 +7,6 @@ def backup_postgres_db(db_name, dest="/var/backups/postgres"):
     timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
     os.makedirs(dest, exist_ok=True)
     output_file = os.path.join(dest, f"{db_name}_{timestamp}.sql")
-    cmd = ["pg_dump", db_name, "-f", output_file]
+    cmd = ["pg_dump", "-U", "myuser", db_name, "-f", output_file]
     subprocess.run(cmd, check=True)
     return output_file
