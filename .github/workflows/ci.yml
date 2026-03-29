@@ -44,6 +44,9 @@ jobs:
           pip install -r requirements.txt
           pip install pytest psycopg2-binary
 
+      - name: Install project as package
+        run: pip install -e .
+
       - name: Create backup_history table
         run: |
           python - << 'EOF'
@@ -71,4 +74,4 @@ jobs:
           EOF
 
       - name: Run tests
-        run: pytest
+        run: pytest -vv
