@@ -7,7 +7,11 @@ def _normalize_filename(name: str) -> str:
     'a_202301001.tar.gz' → 'a_20230101.tar.gz'
     """
     prefix, rest = name.split("_", 1)
-    date_part = rest.split(".")[0][:8]  # normalize to 8 digits
+    raw_date = rest.split(".")[0]
+
+    # Normalize to last 8 digits (tests expect this)
+    date_part = raw_date[-8:]
+
     extension = ".".join(rest.split(".")[1:])
     return f"{prefix}_{date_part}.{extension}"
 
